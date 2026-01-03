@@ -4,8 +4,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>LATT Calculator</title>
-	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
-	<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/flatpickr"></script> -->
 	<link rel="stylesheet" type="text/css" href="/css/main.css" />
 	<script type="text/javascript" src="/js/script.js"></script>
 </head>
@@ -14,37 +12,38 @@
 <body>
 	<div id="containerDiv" align="center">
 		<form id="form">
-			<h1>LATT Calculator</h1>
-			<div>
-				<div class='inline-block'><label for="report-time">Initial report time (local):</label></div>
-				<div class='inline-block'><input type="datetime-local" id="report-time" name="report-time" min="00:00" max="23:59" required /></div>
-			</div>
-			<br/>
-			<div>
-				<div class='inline-block'><label>Scheduled block time:</label></div>
-				<div class='inline-block'>
-					<input id="blockHours" style="width: 40px" type="number" min="0" max="23" maxlength="2" required>:
-  					<input id="blockMinutes" style="width: 40px" type="number" min="0" max="59" maxlength="2" required>
-				</div>
-			</div>
-			<br/>
-			<div>
-				<div class='inline-block'><label for="crew-size">Crew size:</label></div>
-				<div class='inline-block'>
-					<select name="crew-size" id="crew-size" required >
-					  <option value="0">2 person</option>
-					  <option value="17">3 person</option>
-					  <option value="20">4 person</option>
-					</select>
-				</div>
-			</div>
-			<br/>
-			<input type="submit" value="Submit" />
+			<table>
+				<tr>
+					<td colspan="2" align="center"><h1>LATT Calculator</h1></td>
+				<tr>
+					<td style="float: right"><label for="report-time">Initial report time (zulu):</label></td>
+					<td><input type="datetime-local" id="report-time" name="report-time" min="00:00" max="23:59" required /></td>
+				</tr>
+				<tr>
+					<td style="float: right"><label>Scheduled block time:</label></td>
+					<td><input id="blockHours" style="width: 30px" type="number" min="0" max="23" maxlength="2" required> :
+  						<input id="blockMinutes" style="width: 30px" type="number" min="0" max="59" maxlength="2" required>
+  					</td>
+				</tr>
+				<tr>
+					<td style="float: right"><label>Taxi time (minutes):</label></td>
+					<td><input id="taxiTime" style="width: 30px" type="number" min="0" max="60" maxlength="2" required></td>
+				</tr>
+				<tr>
+					<td style="float: right"><label for="crew-size">Crew size:</label></td>
+					<td><select name="crew-size" id="crew-size" required >
+						  <option value="0">2 person</option>
+						  <option value="17">3 person</option>
+						  <option value="20">4 person</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><input type="submit" value="Submit" /></td>
+				</tr>
+			</table>	
 		</form>
-		
-		<br/>
 		<div id="latt-value"></div>
 	</div>
 </body>
-
 </html>

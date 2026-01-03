@@ -2,25 +2,39 @@ window.onload = function() {
 	document.getElementById('form').addEventListener('submit', function(e) {
 		e.preventDefault();
 		
-	 	const reportTime = new Date(document.getElementById('report-time').value);
-		const zuluReportTime = reportTime.toJSON();
+	 	const zuluReportTime = new Date(document.getElementById('report-time').value);
 		const schedBlockHours = document.getElementById('blockHours').value;
 		const schedBlockMins = document.getElementById('blockMinutes').value;
+		const schedTaxiTime = document.getElementById('taxiTime').value;
 	  	const crewSize = document.getElementById('crew-size').value;
-		console.log('reportTime:  ' + reportTime);
 		console.log('crewSize:  ' + crewSize);
 		console.log('schedBlockTime:  ' + schedBlockHours + ':' + schedBlockMins);
+		console.log('schedTaxiTime:  ' + schedTaxiTime);
 		console.log('zuluReportTime:  ' + zuluReportTime);
 		
-		const latestTimeToLeaveMili = calculateTime(zuluReportTime, crewSize, schedBlockHours, schedBlockMins);
-		const latestTimeToLeaveDateTime = new Date(latestTimeToLeaveMili).toLocaleString('en-US');
+		const latestTimeToLeaveMili = calculateTime(zuluReportTime, crewSize, schedBlockHours, schedBlockMins, schedTaxiTime);
+		const latestTimeToLeaveDateTime = formatDateTime(new Date(latestTimeToLeaveMili));
 		console.log('latestTimeToLeaveDateTime:  ' + latestTimeToLeaveDateTime);
 		
-		document.getElementById("latt-value").innerHTML = '<h1>The latest <span style="color: green">local</span> time you can depart is ' + latestTimeToLeaveDateTime + '</h1>';
+		document.getElementById("latt-value").innerHTML = '<h1>The latest <span style="color: green">zulu</span> time you can depart is on ' + latestTimeToLeaveDateTime + '</h1>';
 	});
 
 	setViewportHeight();
 	window.addEventListener('resize', setViewportHeight);
+}
+
+function formatDateTime(date) {
+    const padTwoDigits = (num) => num.toString().padStart(2, "0");
+
+    const year = date.getFullYear();
+    const month = padTwoDigits(date.getMonth() + 1);
+    const day = padTwoDigits(date.getDate());
+    const hours = padTwoDigits(date.getHours());
+    const minutes = padTwoDigits(date.getMinutes());
+
+    return (
+        `${month}-${day}-${year} at ${hours}:${minutes}`
+    );
 }
 
 const setViewportHeight = () => {
@@ -28,7 +42,7 @@ const setViewportHeight = () => {
 	    document.documentElement.style.setProperty('--vh', `${vh}px`);
 };
 
-function calculateTime(zuluReportTime, maxDutyLimit, schedBlockHours, schedBlockMins){
+function calculateTime(zuluReportTime, maxDutyLimit, schedBlockHours, schedBlockMins, schedTaxiTime){
 	if(maxDutyLimit == 0){
 		maxDutyLimit = findTwoPersonMaxDutyLimit(zuluReportTime);
 	}
@@ -36,16 +50,17 @@ function calculateTime(zuluReportTime, maxDutyLimit, schedBlockHours, schedBlock
 	const zuluReportTimeMili = new Date(zuluReportTime).getTime();
 	const dutyTimeMili = maxDutyLimit * 3600000;
 	const maxDutyDateTimeMili = zuluReportTimeMili + dutyTimeMili;
-	const latestZuluDateTimeMili = new Date(maxDutyDateTimeMili).getTime();
-	console.log('latestZuluDateTimeMili  ' + latestZuluDateTimeMili);
+	console.log('maxDutyDateTimeMili  ' + maxDutyDateTimeMili);
 	
 	const blockHoursMili = schedBlockHours * 3600000;
 	console.log('blockHoursMili  ' + blockHoursMili);
 	const blockMinutesMili = schedBlockMins * 60000;
 	console.log('blockMinutesMili  ' + blockMinutesMili);
+	const taxiTimeMili = schedTaxiTime * 60000;
+	console.log('taxiTimeMili  ' + taxiTimeMili);
 	
-	const latestTimeToLeave = latestZuluDateTimeMili - blockHoursMili - blockMinutesMili;
-	return latestTimeToLeave;
+	const latestTimeToLeaveMili = maxDutyDateTimeMili - blockHoursMili - blockMinutesMili - taxiTimeMili;
+	return latestTimeToLeaveMili;
 }
 
 function findTwoPersonMaxDutyLimit(zuluReportTime){
