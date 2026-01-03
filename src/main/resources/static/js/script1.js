@@ -18,7 +18,15 @@ window.onload = function() {
 		
 		document.getElementById("latt-value").innerHTML = '<h1>The latest <span style="color: green">local</span> time you can depart is ' + latestTimeToLeaveDateTime + '</h1>';
 	});
+
+	setViewportHeight();
+	window.addEventListener('resize', setViewportHeight);
 }
+
+const setViewportHeight = () => {
+	    let vh = window.innerHeight * 0.01;
+	    document.documentElement.style.setProperty('--vh', `${vh}px`);
+};
 
 function calculateTime(zuluReportTime, maxDutyLimit, schedBlockHours, schedBlockMins){
 	if(maxDutyLimit == 0){
