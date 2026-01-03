@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>LATT Calculator</title>
+	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
+	<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/flatpickr"></script> -->
+	<link rel="stylesheet" type="text/css" href="/css/main.css" />
+	<script type="text/javascript" src="/js/script.js"></script>
+</head>
+
+
+<body>
+	<div id="containerDiv" align="center">
+		<form id="form">
+			<h1>LATT Calculator</h1>
+			<div>
+				<div class='inline-block'><label for="report-time">Initial report time (local):</label></div>
+				<div class='inline-block'><input type="datetime-local" id="report-time" name="report-time" required /></div>
+			</div>
+			<br/>
+			<div>
+				<div class='inline-block'><label for="crew-size">Scheduled block time:</label></div>
+				<div class='inline-block'><input type="time" id="sched-block-time" name="sched-block-time" required /></div>
+			</div>
+			<br/>
+			<div>
+				<div class='inline-block'><label for="crew-size">Crew size:</label></div>
+				<div class='inline-block'>
+					<select name="crew-size" id="crew-size" required >
+					  <option value="0">2 person</option>
+					  <option value="17">3 person</option>
+					  <option value="20">4 person</option>
+					</select>
+				</div>
+			</div>
+			<br/>
+			<input type="submit" value="Submit" />
+		</form>
+		
+		<br/>
+		<div id="latt-value"></div>
+	</div>
+</body>
+</html>
