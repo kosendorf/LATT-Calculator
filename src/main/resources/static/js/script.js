@@ -4,14 +4,15 @@ window.onload = function() {
 		
 	 	const reportTime = new Date(document.getElementById('report-time').value);
 		const zuluReportTime = reportTime.toJSON();
-		const schedBlockTime = document.getElementById('sched-block-time').value;
+		const schedBlockHours = document.getElementById('blockHours').value;
+		const schedBlockMins = document.getElementById('blockMinutes').value;
 	  	const crewSize = document.getElementById('crew-size').value;
 		console.log('reportTime:  ' + reportTime);
 		console.log('crewSize:  ' + crewSize);
-		console.log('schedBlockTime:  ' + schedBlockTime);
+		console.log('schedBlockTime:  ' + schedBlockHours + ':' + schedBlockMins);
 		console.log('zuluReportTime:  ' + zuluReportTime);
 		
-		const latestTimeToLeaveMili = calculateTime(zuluReportTime, crewSize, schedBlockTime);
+		const latestTimeToLeaveMili = calculateTime(zuluReportTime, crewSize, schedBlockHours, schedBlockMins);
 		const latestTimeToLeaveDateTime = new Date(latestTimeToLeaveMili).toLocaleString('en-US');
 		console.log('latestTimeToLeaveDateTime:  ' + latestTimeToLeaveDateTime);
 		
@@ -19,7 +20,7 @@ window.onload = function() {
 	});
 }
 
-function calculateTime(zuluReportTime, maxDutyLimit, schedBlockTime){
+function calculateTime(zuluReportTime, maxDutyLimit, schedBlockHours, schedBlockMins){
 	if(maxDutyLimit == 0){
 		maxDutyLimit = findTwoPersonMaxDutyLimit(zuluReportTime);
 	}
@@ -30,14 +31,9 @@ function calculateTime(zuluReportTime, maxDutyLimit, schedBlockTime){
 	const latestZuluDateTimeMili = new Date(maxDutyDateTimeMili).getTime();
 	console.log('latestZuluDateTimeMili  ' + latestZuluDateTimeMili);
 	
-	console.log('schedBlockTime  ' + schedBlockTime);
-	const blockHours = schedBlockTime.substring(0,2);
-	const blockHoursMili = blockHours * 3600000;
-	console.log('blockHours  ' + blockHours);
+	const blockHoursMili = schedBlockHours * 3600000;
 	console.log('blockHoursMili  ' + blockHoursMili);
-	const blockMinutes = schedBlockTime.substring(3,schedBlockTime.length);
-	const blockMinutesMili = blockMinutes * 60000;
-	console.log('blockMinutes  ' + blockMinutes);
+	const blockMinutesMili = schedBlockMins * 60000;
 	console.log('blockMinutesMili  ' + blockMinutesMili);
 	
 	const latestTimeToLeave = latestZuluDateTimeMili - blockHoursMili - blockMinutesMili;

@@ -20,8 +20,11 @@
 			</div>
 			<br/>
 			<div>
-				<div class='inline-block'><label for="crew-size">Scheduled block time:</label></div>
-				<div class='inline-block'><input type="time" id="sched-block-time" name="sched-block-time" required /></div>
+				<div class='inline-block'><label>Scheduled block time:</label></div>
+				<div class='inline-block'>
+					<input id="blockHours" style="width: 40px" type="number" min="0" max="23" maxlength="2" required>:
+  					<input id="blockMinutes" style="width: 40px" type="number" min="0" max="59" maxlength="2" required>
+				</div>
 			</div>
 			<br/>
 			<div>
