@@ -7,14 +7,14 @@ window.onload = function() {
 		const schedBlockMins = document.getElementById('block-minutes').value;
 		//const schedTaxiTime = document.getElementById('taxiTime').value;
 	  	const crewSize = document.getElementById('crew-size').value;
-		console.log('crewSize:  ' + crewSize);
-		console.log('schedBlockTime:  ' + schedBlockHours + ':' + schedBlockMins);
+		//console.log('crewSize:  ' + crewSize);
+		//console.log('schedBlockTime:  ' + schedBlockHours + ':' + schedBlockMins);
 		//console.log('schedTaxiTime:  ' + schedTaxiTime);
-		console.log('zuluReportTime:  ' + zuluReportTime);
+		//console.log('zuluReportTime:  ' + zuluReportTime);
 		
 		const latestTimeToLeaveMili = calculateTime(zuluReportTime, crewSize, schedBlockHours, schedBlockMins);
 		const latestTimeToLeaveDateTime = formatDateTime(new Date(latestTimeToLeaveMili));
-		console.log('latestTimeToLeaveDateTime:  ' + latestTimeToLeaveDateTime);
+		//console.log('latestTimeToLeaveDateTime:  ' + latestTimeToLeaveDateTime);
 		
 		document.getElementById("latt-value").innerHTML = '<h1>The latest <span style="color: green">zulu</span> time you can depart is on ' + latestTimeToLeaveDateTime + '</h1>';
 	});
@@ -50,12 +50,12 @@ function calculateTime(zuluReportTime, maxDutyLimit, schedBlockHours, schedBlock
 	const zuluReportTimeMili = new Date(zuluReportTime).getTime();
 	const dutyTimeMili = maxDutyLimit * 3600000;
 	const maxDutyDateTimeMili = zuluReportTimeMili + dutyTimeMili;
-	console.log('maxDutyDateTimeMili  ' + maxDutyDateTimeMili);
+	//console.log('maxDutyDateTimeMili  ' + maxDutyDateTimeMili);
 	
 	const blockHoursMili = schedBlockHours * 3600000;
-	console.log('blockHoursMili  ' + blockHoursMili);
+	//console.log('blockHoursMili  ' + blockHoursMili);
 	const blockMinutesMili = schedBlockMins * 60000;
-	console.log('blockMinutesMili  ' + blockMinutesMili);
+	//console.log('blockMinutesMili  ' + blockMinutesMili);
 	/*const taxiTimeMili = schedTaxiTime * 60000;
 	console.log('taxiTimeMili  ' + taxiTimeMili);*/
 	
@@ -67,9 +67,9 @@ function findTwoPersonMaxDutyLimit(zuluReportTime){
 	const date = new Date(zuluReportTime);
 	
 	const dateHours = date.getHours();
-	const dateMins = date.getMinutes();
-	console.log('dateHours  ' + dateHours);
-	console.log('dateMins  ' + dateMins);
+	//const dateMins = date.getMinutes();
+	//console.log('dateHours  ' + dateHours);
+	//console.log('dateMins  ' + dateMins);
 	
 	if(dateHours >= 1 && dateHours < 5){
 		return 11.5;
