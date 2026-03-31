@@ -5,7 +5,7 @@ const PRECACHE = [
 	'script.js',
 	'main.css',
 	'jquery-3.7.1.min.js',
-	'manifest.json',
+	'manifest.json'
 ];
 
 // Install: pre-cache all static assets
