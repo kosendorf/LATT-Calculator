@@ -1,4 +1,4 @@
-const VERSION = 'v11';
+const VERSION = 'v2';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
@@ -9,46 +9,39 @@ const APP_STATIC_RESOURCES = [
 	'./manifest.json'
 ];
 
-// On install, cache the static resources
-self.addEventListener("install", (event) => {
+// Install: cache all static assets
+self.addEventListener('install', event => {
 	event.waitUntil(
-		(async () => {
-			const cache = await caches.open(CACHE_NAME);
-			cache.addAll(APP_STATIC_RESOURCES);
-		})(),
+		caches.open(CACHE_NAME)
+			.then(cache => cache.addAll(APP_STATIC_RESOURCES))
+			.then(() => self.skipWaiting())
 	);
 });
 
-// delete old caches on activate
-self.addEventListener("activate", (event) => {
+// Activate: delete any old caches from previous versions
+self.addEventListener('activate', event => {
 	event.waitUntil(
-		(async () => {
-			const names = await caches.keys();
-			await Promise.all(
-				names.map((name) => {
-					if (name !== CACHE_NAME) {
-						caches.delete(name);
-					}
-				}),
-			);
-			await clients.claim();
-		})(),
+		caches.keys().then(keys =>
+			Promise.all(
+				keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+			)
+		).then(() => self.clients.claim())
 	);
 });
 
-// On fetch, intercept server requests
-// and respond with cached responses instead of going to network
-self.addEventListener("fetch", (event) => {
-	// For all other requests, go to the cache first, and then the network.
+// Fetch: serve from cache first; fall back to network
+self.addEventListener('fetch', event => {
 	event.respondWith(
-		(async () => {
-			const cache = await caches.open(CACHE_NAME);
-			const cachedResponse = await cache.match(event.request.url);
-			if (cachedResponse) {
-				// Return the cached response if it's available.
-				return cachedResponse;
-			}
-			return;
-		})(),
+		caches.match(event.request).then(cached => {
+			if (cached) return cached;
+			return fetch(event.request).then(response => {
+				// Cache any new successful responses
+				if (response && response.status === 200 && response.type === 'basic') {
+					const clone = response.clone();
+					caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+				}
+				return response;
+			});
+		})
 	);
 });
