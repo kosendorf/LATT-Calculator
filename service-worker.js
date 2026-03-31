@@ -1,4 +1,4 @@
-const CACHE_NAME = 'latt-calculator-v1.0.3';
+const CACHE_NAME = 'latt-calculator-v1.0.4';
 
 const PRECACHE = [
 	'index.html',
@@ -17,17 +17,14 @@ self.addEventListener('install', event => {
 	);
 });
 
-self.addEventListener('activate', function(event) {
-	event.waitUntil(self.clients.claim());
+// Activate: delete any old caches from previous versions
+self.addEventListener('activate', event => {
 	event.waitUntil(
-		//Check cache number, clear all assets and re-add if cache number changed
-		caches.keys().then(cacheNames => {
-			return Promise.all(
-				cacheNames
-					.filter(cacheName => (cacheName !== CACHE_NAME))
-					.map(cacheName => caches.delete(cacheName))
-			);
-		})
+		caches.keys().then(keys =>
+			Promise.all(
+				keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+			)
+		).then(() => self.clients.claim())
 	);
 });
 
