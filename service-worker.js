@@ -1,4 +1,4 @@
-const VERSION = 'v3';
+const VERSION = 'v1';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
@@ -31,11 +31,9 @@ self.addEventListener('activate', event => {
 
 // Fetch: serve from cache first; fall back to network
 self.addEventListener('fetch', event => {
+	console.log('in fetch');
 	event.respondWith(
-		caches.match(()=>{
-			console.log(event.request);
-			return event.request;
-		}).then(cached => {
+		caches.match(event.request).then(cached => {
 			if (cached) return cached;
 			return fetch(event.request).then(response => {
 				// Cache any new successful responses
