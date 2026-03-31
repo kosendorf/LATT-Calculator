@@ -1,6 +1,6 @@
 {
   "name": "LATT Calculator",
-  "short_name": "LATT Calculator",
+  "short_name": "LATT Calc",
   "description": "A latest allowable take-off time calculator.",
   "display": "standalone",
   "background_color": "#091d60",
