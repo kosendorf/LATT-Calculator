@@ -1,4 +1,4 @@
-const CACHE_NAME = 'latt-calculator-v1.0.15';
+const CACHE_NAME = 'latt-calculator-v1.0.16';
 
 const CACHE = [
 	'index.html',
@@ -10,10 +10,11 @@ const CACHE = [
 
 // Install: cache all static assets
 self.addEventListener('install', event => {
-	event.waitUntil(
-		caches.open(CACHE_NAME)
-			.then(cache => cache.addAll(CACHE))
-			.then(() => self.skipWaiting())
+   event.waitUntil(
+      caches.open(CACHE_NAME)
+      .then(cache => {
+         return cache.addAll(CACHE);
+      })
 	);
 });
 
