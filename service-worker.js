@@ -1,4 +1,4 @@
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
@@ -37,26 +37,27 @@ self.addEventListener("activate", (event) => {
 	);
 });
 
-// On fetch, intercept server requests
-// and respond with cached responses instead of going to network
-self.addEventListener("fetch", (event) => {
-	// As a single page app, direct app to always go to cached home page.
-	if (event.request.mode === "navigate") {
-		event.respondWith(caches.match("/"));
-		return;
-	}
+// The fetch handler serves responses for same-origin resources from a cache.
+// If no response is found, it populates the runtime cache with the response
+// from the network before returning it to the page.
+self.addEventListener('fetch', event => {
+  // Skip cross-origin requests, like those for Google Analytics.
+  if (event.request.url.startsWith(self.location.origin)) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
 
-	// For all other requests, go to the cache first, and then the network.
-	event.respondWith(
-		(async () => {
-			const cache = await caches.open(CACHE_NAME);
-			const cachedResponse = await cache.match(event.request.url);
-			if (cachedResponse) {
-				// Return the cached response if it's available.
-				return cachedResponse;
-			}
-			// If resource isn't in the cache, return a 404.
-			return new Response(null, { status: 404 });
-		})(),
-	);
+        return caches.open(CACHE_NAME).then(cache => {
+          return fetch(event.request).then(response => {
+            // Put a copy of the response in the runtime cache.
+            return cache.put(event.request, response.clone()).then(() => {
+              return response;
+            });
+          });
+        });
+      })
+    );
+  }
 });
