@@ -1,7 +1,6 @@
 const CACHE_NAME = 'latt-calculator-v1';
 
 const PRECACHE = [
-	'./index.html',
 	'./src/main/resources/static/'
 ];
 
