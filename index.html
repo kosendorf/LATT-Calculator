@@ -58,5 +58,13 @@
 		</form>
 		<div id="latt-value"></div>
 	</div>
+	
+	<!-- PWA: register service worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js')
+                .catch(err => console.warn('Service worker registration failed:', err));
+        }
+    </script>
 </body>
 </html>

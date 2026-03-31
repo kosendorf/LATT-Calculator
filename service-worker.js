@@ -1,6 +1,6 @@
-const CACHE_NAME = 'latt-calculator-v1.0.10';
+const CACHE_NAME = 'latt-calculator-v1.0.11';
 
-const PRECACHE = [
+const CACHE = [
 	'index.html',
 	'script.js',
 	'main.css',
@@ -8,11 +8,11 @@ const PRECACHE = [
 	'manifest.json'
 ];
 
-// Install: pre-cache all static assets
+// Install: cache all static assets
 self.addEventListener('install', event => {
 	event.waitUntil(
 		caches.open(CACHE_NAME)
-			.then(cache => cache.addAll(PRECACHE))
+			.then(cache => cache.addAll(CACHE))
 			.then(() => self.skipWaiting())
 	);
 });
