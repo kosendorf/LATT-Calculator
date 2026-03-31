@@ -1,6 +1,11 @@
-const CACHE_NAME = 'latt-calculator-v1.0.18';
+// Names of the two caches used in this version of the service worker.
+// Change to v2, etc. when you update any of the local resources, which will
+// in turn trigger the install event again.
+const PRECACHE = 'precache-v1';
+const RUNTIME = 'runtime';
 
-const CACHE = [
+// A list of local resources we always want to be cached.
+const PRECACHE_URLS = [
 	'./index.html',
 	'./script.js',
 	'./main.css',
@@ -8,40 +13,50 @@ const CACHE = [
 	'./manifest.json'
 ];
 
-// Install: cache all static assets
+// The install handler takes care of precaching the resources we always need.
 self.addEventListener('install', event => {
-   event.waitUntil(
-      caches.open(CACHE_NAME)
-      .then(cache => {
-         return cache.addAll(CACHE);
-      })
-	);
+  event.waitUntil(
+    caches.open(PRECACHE)
+      .then(cache => cache.addAll(PRECACHE_URLS))
+      .then(self.skipWaiting())
+  );
 });
 
-// Activate: delete any old caches from previous versions
+// The activate handler takes care of cleaning up old caches.
 self.addEventListener('activate', event => {
-	event.waitUntil(
-		caches.keys().then(keys =>
-			Promise.all(
-				keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
-			)
-		).then(() => self.clients.claim())
-	);
+  const currentCaches = [PRECACHE, RUNTIME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
+    }).then(cachesToDelete => {
+      return Promise.all(cachesToDelete.map(cacheToDelete => {
+        return caches.delete(cacheToDelete);
+      }));
+    }).then(() => self.clients.claim())
+  );
 });
 
-// Fetch: serve from cache first; fall back to network
+// The fetch handler serves responses for same-origin resources from a cache.
+// If no response is found, it populates the runtime cache with the response
+// from the network before returning it to the page.
 self.addEventListener('fetch', event => {
-	event.respondWith(
-		caches.match(event.request).then(cached => {
-			if (cached) return cached;
-			return fetch(event.request).then(response => {
-				// Cache any new successful responses (e.g. fonts falling back online)
-				if (response && response.status === 200 && response.type === 'basic') {
-					const clone = response.clone();
-					caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-				}
-				return response;
-			});
-		})
-	);
+  // Skip cross-origin requests, like those for Google Analytics.
+  if (event.request.url.startsWith(self.location.origin)) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        return caches.open(RUNTIME).then(cache => {
+          return fetch(event.request).then(response => {
+            // Put a copy of the response in the runtime cache.
+            return cache.put(event.request, response.clone()).then(() => {
+              return response;
+            });
+          });
+        });
+      })
+    );
+  }
 });
