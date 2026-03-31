@@ -1,4 +1,4 @@
-const VERSION = 'v1';
+const VERSION = 'v10';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
@@ -27,9 +27,8 @@ self.addEventListener("activate", (event) => {
 			await Promise.all(
 				names.map((name) => {
 					if (name !== CACHE_NAME) {
-						return caches.delete(name);
+						caches.delete(name);
 					}
-					return undefined;
 				}),
 			);
 			await clients.claim();
@@ -37,27 +36,19 @@ self.addEventListener("activate", (event) => {
 	);
 });
 
-// The fetch handler serves responses for same-origin resources from a cache.
-// If no response is found, it populates the runtime cache with the response
-// from the network before returning it to the page.
-self.addEventListener('fetch', event => {
-  // Skip cross-origin requests, like those for Google Analytics.
-  if (event.request.url.startsWith(self.location.origin)) {
-    event.respondWith(
-      caches.match(event.request).then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-
-        return caches.open(CACHE_NAME).then(cache => {
-          return fetch(event.request).then(response => {
-            // Put a copy of the response in the runtime cache.
-            return cache.put(event.request, response.clone()).then(() => {
-              return response;
-            });
-          });
-        });
-      })
-    );
-  }
+// On fetch, intercept server requests
+// and respond with cached responses instead of going to network
+self.addEventListener("fetch", (event) => {
+	// For all other requests, go to the cache first, and then the network.
+	event.respondWith(
+		(async () => {
+			const cache = await caches.open(CACHE_NAME);
+			const cachedResponse = await cache.match(event.request.url);
+			if (cachedResponse) {
+				// Return the cached response if it's available.
+				return cachedResponse;
+			}
+			return;
+		})(),
+	);
 });
