@@ -3,8 +3,8 @@ window.onload = function() {
 		e.preventDefault();
 		
 	 	const zuluReportTime = new Date(document.getElementById('report-time').value);
-		const schedBlockHours = document.getElementById('blockHours').value;
-		const schedBlockMins = document.getElementById('blockMinutes').value;
+		const schedBlockHours = document.getElementById('block-hours').value;
+		const schedBlockMins = document.getElementById('block-minutes').value;
 		//const schedTaxiTime = document.getElementById('taxiTime').value;
 	  	const crewSize = document.getElementById('crew-size').value;
 		console.log('crewSize:  ' + crewSize);
