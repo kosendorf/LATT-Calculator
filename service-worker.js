@@ -1,4 +1,4 @@
-const CACHE_NAME = 'latt-calculator-v1.0.6';
+const CACHE_NAME = 'latt-calculator-v1.0.7';
 
 const PRECACHE = [
 	'index.html',
