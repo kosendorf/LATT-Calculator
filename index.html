@@ -19,31 +19,6 @@
 	<link rel="stylesheet" type="text/css" href="main.css" />
 	<script type="text/javascript" src="jquery-3.7.1.min.js"></script>
 	<script type="text/javascript" src="script.js"></script>
-	
-	<script type="module">
-	import {Workbox} from 'https://storage.googleapis.com/workbox-cdn/releases/4.1.0/workbox-window.prod.mjs';
-
-  function createUIPrompt(opts) {
-    if (confirm('A new update is available. Do you want to update now?')) {
-       opts.onAccept()
-    }
-  }
-
-  if ('serviceWorker' in navigator) {
-    const wb = new Workbox('/sw.js');
-    wb.addEventListener('waiting', (event) => {
-      const prompt = createUIPrompt({
-        onAccept: async () => {
-          wb.addEventListener('controlling', (event) => {
-            window.location.reload();
-          });
-          wb.messageSW({type: 'SKIP_WAITING'});
-        }
-      })
-    });
-    wb.register();
-  }
-  </script>
 </head>
 
 

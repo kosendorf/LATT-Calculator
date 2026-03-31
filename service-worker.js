@@ -1,4 +1,4 @@
-const CACHE_NAME = 'latt-calculator-v1.0.4';
+const CACHE_NAME = 'latt-calculator-v1.0.5';
 
 const PRECACHE = [
 	'index.html',
@@ -43,10 +43,4 @@ self.addEventListener('fetch', event => {
 			});
 		})
 	);
-});
-
-self.addEventListener("message", function(event) {
-    if (event.data && event.data.type === "SKIP_WAITING") {
-        skipWaiting();
-    }
 });
