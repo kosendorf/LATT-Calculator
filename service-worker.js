@@ -1,7 +1,7 @@
 const CACHE_NAME = 'latt-calculator-v1';
 
 const PRECACHE = [
-	'/static/'
+	'./static/'
 ];
 
 // Install: pre-cache all static assets
