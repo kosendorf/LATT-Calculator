@@ -1,11 +1,11 @@
-const CACHE_NAME = 'latt-calculator-v1.0.17';
+const CACHE_NAME = 'latt-calculator-v1.0.18';
 
 const CACHE = [
-	'index.html',
-	'script.js',
-	'main.css',
-	'jquery-3.7.1.min.js',
-	'manifest.json'
+	'./index.html',
+	'./script.js',
+	'./main.css',
+	'./jquery-3.7.1.min.js',
+	'./manifest.json'
 ];
 
 // Install: cache all static assets
