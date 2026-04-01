@@ -1,4 +1,4 @@
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
@@ -42,6 +42,7 @@ self.addEventListener('fetch', event => {
 					const clone = response.clone();
 					caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
 				}
+				location.reload();
 				return response;
 			});
 		})
