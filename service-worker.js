@@ -1,8 +1,8 @@
-const VERSION = 'v1.0.11';
+const VERSION = 'v1.0.12';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
-	'../index.html',
+	'./index.html',
 	'./static/css/main.css',
 	'./static/js/script.js',
 	'./static/js/jquery-3.7.1.min.js',
