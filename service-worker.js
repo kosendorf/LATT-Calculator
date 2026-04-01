@@ -1,4 +1,4 @@
-const VERSION = 'v1.0.5';
+const VERSION = 'v1.0.6';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
