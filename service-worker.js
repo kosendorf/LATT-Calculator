@@ -1,4 +1,4 @@
-const VERSION = 'v1.0.14';
+const VERSION = 'v1.0.0';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
@@ -38,7 +38,7 @@ self.addEventListener('fetch', event => {
 				// Cache any new successful responses
 				if (response && response.status === 200 && response.type === 'basic') {
 					const clone = response.clone();
-					caches.open(CACHE_NAME).then(cache => cache.add(clone));
+					caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
 				}
 				return response;
 			});
