@@ -1,4 +1,4 @@
-const VERSION = 'v1.0.1';
+const VERSION = 'v1.0.0';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
@@ -44,5 +44,4 @@ self.addEventListener('fetch', event => {
 			});
 		})
 	);
-	location.reload();
 });
