@@ -1,4 +1,4 @@
-const VERSION = 'v1.0.6';
+const VERSION = 'v1.0.7';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
@@ -6,7 +6,7 @@ const APP_STATIC_RESOURCES = [
 	'./script.js',
 	'./main.css',
 	'./jquery-3.7.1.min.js',
-	'./manifest.json'
+	'static/manifest.json'
 ];
 
 // Install: cache all static assets
