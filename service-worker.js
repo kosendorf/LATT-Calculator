@@ -1,4 +1,4 @@
-const VERSION = 'v1.0.2';
+const VERSION = 'v1.0.1';
 const CACHE_NAME = `latt-calc-${VERSION}`;
 
 const APP_STATIC_RESOURCES = [
@@ -20,8 +20,23 @@ self.addEventListener('install', event => {
 	);
 });
 
+self.addEventListener("activate", (event) => {
+	event.waitUntil(
+		caches.keys().then((cacheNames) =>
+			Promise.all(
+				cacheNames.map((cacheName) => {
+					if (!CACHE_NAME.includes(cacheName)) {
+						return caches.delete(cacheName);
+					}
+					return undefined;
+				}),
+			),
+		),
+	);
+});
+
 // Activate: delete any old caches from previous versions
-self.addEventListener('activate', event => {
+/*self.addEventListener('activate', event => {
 	event.waitUntil(
 		caches.keys().then(keys =>
 			Promise.all(
@@ -29,6 +44,10 @@ self.addEventListener('activate', event => {
 			)
 		).then(() => self.clients.claim())
 	);
+});*/
+
+self.addEventListener("fetch", (event) => {
+	event.respondWith(networkFirst(event.request));
 });
 
 async function networkFirst(request) {
@@ -44,11 +63,6 @@ async function networkFirst(request) {
 		return cachedResponse || Response.error();
 	}
 }
-
-self.addEventListener("fetch", (event) => {
-	event.respondWith(networkFirst(event.request));	
-});
-
 
 
 // Fetch: serve from cache first; fall back to network
