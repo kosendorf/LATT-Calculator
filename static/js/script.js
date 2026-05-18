@@ -36,7 +36,7 @@ function formatDateTime(date) {
     const minutes = padTwoDigits(date.getMinutes());
 
     return (
-        `${month}-${day}-${year} at ${hours}:${minutes}`
+        `${month}-${day}-${year} at ${hours}:${minutes}z`
     );
 }
 
