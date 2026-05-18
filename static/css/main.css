@@ -9,3 +9,14 @@ html, body {
 td {
     padding: 5px;
 }
+
+header {
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 25px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+	color: white;
+	background-color: #091d60;
+}

@@ -10,18 +10,16 @@ window.onload = function() {
 	 	const zuluReportTime = new Date(document.getElementById('report-time').value);
 		const schedBlockHours = document.getElementById('block-hours').value;
 		const schedBlockMins = document.getElementById('block-minutes').value;
-		//const schedTaxiTime = document.getElementById('taxiTime').value;
-	  	const crewSize = document.getElementById('crew-size').value;
-		//console.log('crewSize:  ' + crewSize);
+	  	const maxDutyLimit = document.getElementById('crew-size').value;
+		//console.log('maxDutyLimit:  ' + maxDutyLimit);
 		//console.log('schedBlockTime:  ' + schedBlockHours + ':' + schedBlockMins);
-		//console.log('schedTaxiTime:  ' + schedTaxiTime);
 		//console.log('zuluReportTime:  ' + zuluReportTime);
 		
-		const latestTimeToLeaveMili = calculateTime(zuluReportTime, crewSize, schedBlockHours, schedBlockMins);
-		const latestTimeToLeaveDateTime = formatDateTime(new Date(latestTimeToLeaveMili));
-		//console.log('latestTimeToLeaveDateTime:  ' + latestTimeToLeaveDateTime);
+		const lattMili = calculateTime(zuluReportTime, maxDutyLimit, schedBlockHours, schedBlockMins);
+		const lattDateTime = formatDateTime(new Date(lattMili));
+		//console.log('lattDateTime:  ' + lattDateTime);
 		
-		document.getElementById("latt-value").innerHTML = '<h1>The latest <span style="color: green">zulu</span> time you can depart is on ' + latestTimeToLeaveDateTime + '</h1>';
+		document.getElementById("latt-value").innerHTML = '<h3>The latest <span style="color: green">zulu</span> time you can depart is on ' + lattDateTime + '</h3>';
 	});
 
 	//setViewportHeight();
@@ -53,34 +51,33 @@ function calculateTime(zuluReportTime, maxDutyLimit, schedBlockHours, schedBlock
 	}
 	
 	const zuluReportTimeMili = new Date(zuluReportTime).getTime();
-	const dutyTimeMili = maxDutyLimit * 3600000;
-	const maxDutyDateTimeMili = zuluReportTimeMili + dutyTimeMili;
+	const maxDutyLimitMili = maxDutyLimit * 3600000;
+	const maxDutyDateTimeMili = zuluReportTimeMili + maxDutyLimitMili;
 	//console.log('maxDutyDateTimeMili  ' + maxDutyDateTimeMili);
 	
 	const blockHoursMili = schedBlockHours * 3600000;
 	//console.log('blockHoursMili  ' + blockHoursMili);
 	const blockMinutesMili = schedBlockMins * 60000;
 	//console.log('blockMinutesMili  ' + blockMinutesMili);
-	/*const taxiTimeMili = schedTaxiTime * 60000;
-	console.log('taxiTimeMili  ' + taxiTimeMili);*/
+	//Value is 40 minutes. This includes 10 min for taxi in and 30 min for release time.
+	const basicTaxiAndDutyOffMili = 2400000;
 	
-	const latestTimeToLeaveMili = maxDutyDateTimeMili - blockHoursMili - blockMinutesMili;
-	return latestTimeToLeaveMili;
+	const lattMili = maxDutyDateTimeMili - blockHoursMili - blockMinutesMili - basicTaxiAndDutyOffMili;
+	return lattMili;
 }
 
 function findTwoPersonMaxDutyLimit(zuluReportTime){
 	const date = new Date(zuluReportTime);
+	const hour = date.getHours();
+	//const min = date.getMinutes();
+	//console.log('hour  ' + hour);
+	//console.log('min  ' + min);
 	
-	const dateHours = date.getHours();
-	//const dateMins = date.getMinutes();
-	//console.log('dateHours  ' + dateHours);
-	//console.log('dateMins  ' + dateMins);
-	
-	if(dateHours >= 1 && dateHours < 5){
+	if(hour >= 1 && hour < 5){
 		return 11.5;
-	} else if(dateHours >= 5 && dateHours < 16){
+	} else if(hour >= 5 && hour < 16){
 		return 15;
-	} else if(dateHours >= 16 || dateHours < 1){
+	} else if(hour >= 16 || hour < 1){
 		return 13.5;
 	} else {
 		return null;

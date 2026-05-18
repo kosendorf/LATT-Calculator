@@ -22,11 +22,10 @@
 
 
 <body>
+	<header>LATT Calculator</header>
 	<div id="containerDiv" align="center">
 		<form id="form">
 			<table>
-				<tr>
-					<td colspan="2" align="center"><h1>LATT Calculator</h1></td>
 				<tr>
 					<td style="float: right"><label for="report-time">Initial report time (zulu):</label></td>
 					<td><input type="datetime-local" id="report-time" name="report-time" min="00:00" max="23:59" required /></td>
@@ -37,10 +36,6 @@
   						<input id="block-minutes" style="width: 30px" type="number" min="0" max="59" maxlength="2" required>
   					</td>
 				</tr>
-				<!-- <tr>
-					<td style="float: right"><label>Taxi time (minutes):</label></td>
-					<td><input id="taxiTime" style="width: 30px" type="number" min="0" max="60" maxlength="2" required></td>
-				</tr> -->
 				<tr>
 					<td style="float: right"><label for="crew-size">Crew size:</label></td>
 					<td><select name="crew-size" id="crew-size" required >
