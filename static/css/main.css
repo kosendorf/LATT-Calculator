@@ -1,9 +1,10 @@
 body {
+	margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
 	min-height: 100vh;
 	min-height: 100dvh;
-	margin: 0;
-	display: flex;
-	flex-direction: column;
 	background-color: #091d60;
 	color: white;
 }
