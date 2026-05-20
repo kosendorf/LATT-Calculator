@@ -19,7 +19,7 @@ window.onload = function() {
 		const lattDateTime = formatDateTime(new Date(lattMili));
 		//console.log('lattDateTime:  ' + lattDateTime);
 		
-		document.getElementById("latt-value").innerHTML = '<h3>The latest <span style="color: green">zulu</span> time you can depart is on ' + lattDateTime + '</h3>';
+		document.getElementById("latt-value").innerHTML = '<h3>The latest zulu time you can takeoff is on ' + lattDateTime + '</h3>';
 	});
 
 	//setViewportHeight();
